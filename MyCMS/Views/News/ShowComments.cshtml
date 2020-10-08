@@ -1,0 +1,17 @@
+﻿@using MyCMS.Utilities
+@model IEnumerable<DataLayer.PageComment>
+<!-- start each comment -->
+@foreach (var item in Model)
+{
+    <li>
+        <img src="/Content/img/thumb.png">
+        <div>
+            <span> @item.Name </span>
+            <span> @item.CreateDate.ToShmasi() </span>
+        </div>
+        <p style="white-space: pre-wrap">
+            @item.Comment
+        </p>
+    </li>
+}
+<!-- end each comment -->

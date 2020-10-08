@@ -1,0 +1,87 @@
+﻿@model IEnumerable<DataLayer.PageGroup>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<p>
+    <a class="btn btn-success" id="btnNewGroup">افزودن گروه جدید</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                <a class="btn btn-sm btn-warning" onclick="editGroup(@item.GroupID)">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <a class="btn btn-sm btn-danger" onclick="deleteGroup(@item.GroupID)">
+                    <i class="fa fa-trash"></i>
+                </a>
+            
+            </td>
+        </tr>
+    }
+
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="CrudModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CrudModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="CrudModalBody">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+@section scripts
+{
+    <script>
+        $("#btnNewGroup").click(function () {
+            $.get("/Admin/PageGroups/Create",
+                function (result) {
+                    $("#CrudModal").modal();
+                    $("#CrudModalLabel").html("افزودن گروه جدید");
+                    $("#CrudModalBody").html(result);
+                }
+            );
+        });
+
+        function editGroup(id) {
+            $.get("/Admin/PageGroups/Edit/" + id, function (result) {
+                $("#CrudModal").modal();
+                $("#CrudModalLabel").html("ویرایش گروه");
+                $("#CrudModalBody").html(result);
+            });
+        }
+
+        function deleteGroup(id) {
+            $.get("/Admin/PageGroups/Delete/" + id,
+                function(result) {
+                    $("#CrudModal").modal();
+                    $("#CrudModalLabel").html("حذف گروه");
+                    $("#CrudModalBody").html(result);
+                });
+        }
+    </script>
+}
